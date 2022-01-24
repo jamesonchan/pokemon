@@ -1,10 +1,16 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useState } from "react";
 import { getOptionsForVote } from "../utils/getRandomPokemon";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
-  const [first, second] = getOptionsForVote();
+  const [ids, setIds] = useState(getOptionsForVote());
+  const [first, second] = ids;
+  const firstPokemon = trpc.useQuery(["get-pokemon-by-id", { id: first }]);
+  const secondPokemon = trpc.useQuery(["get-pokemon-by-id", { id: second }]);
+
+  if (firstPokemon.isLoading || secondPokemon.isLoading) return null;
 
   return (
     <div className="h-screen w-screen flex flex-col justify-center">
@@ -17,9 +23,16 @@ const Home: NextPage = () => {
       <div className="text-2xl text-center">Which Pokemon is roundest?</div>
       <div className="p-2" />
       <div className="border rounded p-8 flex justify-between items-center max-w-2xl mx-auto  ">
-        <div className="pokemonBox" >{first}</div>
+        <div className="pokemonBox">
+          <img src={firstPokemon.data?.sprites.front_default}/>
+          <p className="text-xl capitalize">{firstPokemon.data?.name}</p>
+        </div>
         <div className="p-8">Vs</div>
-        <div className="pokemonBox" >{second}</div>
+        <div className="pokemonBox">
+        <img src={secondPokemon.data?.sprites.front_default}/>
+        <p className="text-xl capitalize">{secondPokemon.data?.name}</p>
+        </div>
+        <div className=""></div>
       </div>
     </div>
   );

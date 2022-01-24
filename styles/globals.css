@@ -8,6 +8,6 @@ body{
 
 @layer components{
     .pokemonBox{
-        @apply w-16 h-16 bg-red-200 text-center flex flex-col justify-center
+        @apply w-48 h-48 text-center flex flex-col
     }
 }
