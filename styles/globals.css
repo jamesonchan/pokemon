@@ -5,3 +5,9 @@
 body{
     @apply text-white bg-gray-800
 }
+
+@layer components{
+    .pokemonBox{
+        @apply w-16 h-16 bg-red-200 text-center flex flex-col justify-center
+    }
+}
